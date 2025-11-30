@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Aportes - UCLA</title>
+    <!-- Enlazamos el nuevo CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <!-- Barra de Navegación Superior -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-logo">🏫</div>
+            <div class="brand-text">
+                <h1>UCLA / Sistema de Gestión</h1>
+                <p>Decanato de Ciencias y Tecnología</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <!-- ================= DASHBOARD (Inicio) ================= -->
+        <section id="dashboard" class="section active">
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">Admin / Dashboard</div>
+                    <h2 class="page-title">Tablero de Control</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="app.irVistaParticipante()">
+                        👥 Vista Participante
+                    </button>
+                    <button class="btn btn-primary" onclick="app.irCrearCampaña()">
+                        ➕ Nueva Campaña
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alertas Globales -->
+            <div id="alertContainer"></div>
+
+            <!-- Grid de Estadísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="statActivas">0</div>
+                    <div class="stat-label">Campañas Activas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statCompletadas">0</div>
+                    <div class="stat-label">Completadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statTotalAportes">0</div>
+                    <div class="stat-label">Aportes Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statTotalRecaudado">$0</div>
+                    <div class="stat-label">Recaudado</div>
+                </div>
+            </div>
+
+            <!-- Tabla de Campañas -->
+            <div class="card">
+                <h2>📋 Campañas en Curso</h2>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Campaña</th>
+                                <th>Objetivo</th>
+                                <th>Recaudado</th>
+                                <th>Progreso</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableCampanas">
+                            <!-- Se llena vía TypeScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CREAR CAMPAÑA ================= -->
+        <section id="crearCampaña" class="section">
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a onclick="app.irDashboard()">Dashboard</a> <span>/</span> Crear
+                    </div>
+                    <h2 class="page-title">Nueva Campaña</h2>
+                </div>
+            </div>
+
+            <div id="alertContainer2"></div>
+
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <form id="formCampaña">
+                    <div class="form-group">
+                        <label>Nombre de la Campaña</label>
+                        <input type="text" id="campNombre" placeholder="Ej: Dotación de Laboratorio" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="campDescripcion" placeholder="Detalle el propósito..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Monto Objetivo ($)</label>
+                            <input type="number" id="campMontoObjetivo" min="0.01" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Inicio</label>
+                            <input type="date" id="campFechaInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Cierre</label>
+                            <input type="date" id="campFechaCierre" required>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" style="margin-top: 1rem; background: var(--background); border: none;">
+                        ℹ️ <strong>Nota:</strong> La campaña iniciará con estado ACTIVA.
+                    </div>
+
+                    <div class="btn-group" style="justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" onclick="app.irDashboard()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Campaña</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= DETALLE CAMPAÑA ================= -->
+        <section id="detalleCampaña" class="section">
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a onclick="app.irDashboard()">Dashboard</a> <span>/</span> Detalle
+                    </div>
+                    <h2 class="page-title" id="detalleNombre">Cargando...</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btnEditarCampaña" onclick="app.irEditarCampaña()">
+                        ✏️ Editar
+                    </button>
+                    <button class="btn btn-secondary" onclick="app.exportarReporte()">
+                        📄 Reporte
+                    </button>
+                    <button class="btn btn-danger" id="btnCerrarCampaña" onclick="app.mostrarModalCerrar()">
+                        🔒 Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Métricas Superiores -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="detalleObjetivo">$0</div>
+                    <div class="stat-label">Objetivo</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="detalleRecaudado">$0</div>
+                    <div class="stat-label">Recaudado Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="detallePorcentaje">0%</div>
+                    <div class="stat-label">Porcentaje</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="detalleAportantes">0</div>
+                    <div class="stat-label">Donantes</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Progreso de Recaudación</h2>
+                <div class="progress-container">
+                    <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <!-- Mayor Aportante -->
+                <div class="card">
+                    <h2>🏆 Mayor Aportante</h2>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
+                        <h3 id="mayorAportanteCedula" style="font-size: 1.2rem; color: var(--text-main);">N/A</h3>
+                        <p id="mayorAportanteMonto" style="color: var(--success); font-weight: bold; font-size: 1.5rem;">$0.00</p>
+                    </div>
+                </div>
+
+                <!-- Tabla de Aportes -->
+                <div class="card">
+                    <h2>Historial de Aportes</h2>
+                    <div class="table-container" style="max-height: 300px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableAportes">
+                                <!-- Se llena vía TypeScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= EDITAR CAMPAÑA ================= -->
+        <section id="editarCampaña" class="section">
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a onclick="app.irDetalleCampaña()">Detalle</a> <span>/</span> Editar
+                    </div>
+                    <h2 class="page-title">Editar Campaña</h2>
+                </div>
+            </div>
+
+            <div id="alertContainer3"></div>
+
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <form id="formEditar">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="editNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="editDescripcion" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Monto Objetivo</label>
+                            <input type="number" id="editMontoObjetivo" min="0.01" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Inicio</label>
+                            <input type="date" id="editFechaInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Cierre</label>
+                            <input type="date" id="editFechaCierre" required>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="app.irDetalleCampaña()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= VISTA PARTICIPANTE ================= -->
+        <section id="vistaParticipante" class="section">
+            <div class="page-header" style="justify-content: center; flex-direction: column; text-align: center;">
+                <h2 class="page-title">Portal de Donaciones</h2>
+                <p style="color: var(--text-muted);">Seleccione una causa y realice su aporte de forma segura.</p>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button class="btn btn-secondary" onclick="app.irDashboard()">← Volver al Admin</button>
+            </div>
+
+            <div id="alertContainer4" style="max-width: 500px; margin: 0 auto;"></div>
+
+            <!-- Paso 1: Selección -->
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <div class="form-group">
+                    <label>Seleccione una Campaña Activa:</label>
+                    <select id="selectCampaña" onchange="app.seleccionarCampaña()">
+                        <option value="">-- Seleccionar --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Paso 2: Formulario -->
+            <div class="card" id="formularioAporte" style="display: none; max-width: 500px; margin: 2rem auto;">
+                <div style="background: var(--background); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;">
+                    <strong style="color: var(--primary);">Aportando a:</strong>
+                    <div id="aporteNombreCampaña" style="font-size: 1.2rem; font-weight: 600;"></div>
+                </div>
+
+                <form id="formAporte">
+                    <div class="form-group">
+                        <label>Su Cédula de Identidad</label>
+                        <input type="text" id="aporteCedula" placeholder="V-12345678" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Monto a Aportar ($)</label>
+                        <input type="number" id="aporteMonto" min="0.01" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center;">
+                        Confirmar Aporte 💸
+                    </button>
+                </form>
+            </div>
+
+            <!-- Paso 3: Recibo -->
+            <div id="recibo" style="display: none;">
+                <div class="receipt">
+                    <div class="receipt-title">¡Aporte Exitoso!</div>
+                    <div class="receipt-item">
+                        <span>Campaña</span>
+                        <strong id="reciboCampaña">--</strong>
+                    </div>
+                    <div class="receipt-item">
+                        <span>Cédula</span>
+                        <strong id="reciboCedula">--</strong>
+                    </div>
+                    <div class="receipt-item">
+                        <span>Monto</span>
+                        <strong id="reciboMonto" style="color: var(--success); font-size: 1.2rem;">--</strong>
+                    </div>
+                    <div class="receipt-item">
+                        <span>Fecha</span>
+                        <strong id="reciboFecha">--</strong>
+                    </div>
+                    <button class="btn btn-primary" onclick="app.irVistaParticipante()" style="margin-top: 2rem; width: 100%;">
+                        Realizar otro aporte
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal de Confirmación (Global) -->
+    <div id="modalCerrar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚠️ Confirmar Acción</div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea <strong>CERRAR</strong> esta campaña?</p>
+                <p style="font-size: 0.9rem; margin-top: 10px; color: var(--danger);">Esta acción no se puede deshacer y ya no se podrán recibir más fondos.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="app.cerrarModal()">Cancelar</button>
+                <button class="btn btn-danger" onclick="app.cerrarCampaña()">Sí, Cerrar Campaña</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMPORTANTE: Aquí enlazamos el JS compilado -->
+    <script type="module" src="./dist/Cl_index.js"></script>
+</body>
+</html>
