@@ -125,7 +125,7 @@ export default class Cl_vCampaña {
         const tableAportes = document.getElementById('tableAportes') as HTMLTableSectionElement;
         if (campaña.aportes.length === 0) {
             tableAportes.innerHTML =
-                '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">Sin aportes registrados</td></tr>';
+                '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">Sin aportes registrados</td></tr>';
         } else {
             tableAportes.innerHTML = campaña.aportes
                 .map(
@@ -134,6 +134,7 @@ export default class Cl_vCampaña {
                     <td>${a.cedula}</td>
                     <td>$${a.monto.toFixed(2)}</td>
                     <td>${a.fecha.toLocaleDateString('es-ES')}</td>
+                    <td>${a.referencia}</td>
                 </tr>
             `
                 )
@@ -173,11 +174,11 @@ export default class Cl_vCampaña {
         reporte += `Estado: ${c.estado}\n\n`;
         reporte += 'APORTES REGISTRADOS\n';
         reporte += '-------------------\n';
-        reporte += 'Cédula | Monto | Fecha\n';
+        reporte += 'Cédula | Monto | Fecha | Referencia\n';
         c.aportes.forEach(a => {
             reporte += `${a.cedula} | $${a.monto.toFixed(
                 2
-            )} | ${a.fecha.toLocaleDateString('es-ES')}\n`;
+            )} | ${a.fecha.toLocaleDateString('es-ES')} | ${a.referencia}\n`;
         });
 
         const blob = new Blob([reporte], { type: 'text/plain' });

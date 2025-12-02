@@ -93,7 +93,7 @@ export default class Cl_Controlador {
             div.innerHTML = '';
         }, 4000);
     }
-    mostrarRecibo(cedula, monto, nombreCampaña) {
-        this.vAporte.mostrarRecibo(cedula, monto, nombreCampaña);
+    mostrarRecibo(cedula, monto, referencia, nombreCampaña) {
+        this.vAporte.mostrarRecibo(cedula, monto, referencia, nombreCampaña);
     }
 }

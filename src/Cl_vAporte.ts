@@ -8,10 +8,11 @@ export default class Cl_vAporte {
         this.controlador = controlador;
     }
 
-    mostrarRecibo(cedula: string, monto: string, nombreCampaña: string): void {
+    mostrarRecibo(cedula: string, monto: string, referencia: string, nombreCampaña: string): void {
         (document.getElementById('reciboCedula') as HTMLElement).textContent = cedula;
         (document.getElementById('reciboMonto') as HTMLElement).textContent =
             '$' + parseFloat(monto).toFixed(2);
+        (document.getElementById('reciboReferencia') as HTMLElement).textContent = referencia;
         (document.getElementById('reciboCampaña') as HTMLElement).textContent = nombreCampaña;
         (document.getElementById('reciboFecha') as HTMLElement).textContent =
             new Date().toLocaleDateString('es-ES');

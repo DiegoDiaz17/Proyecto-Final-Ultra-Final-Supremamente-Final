@@ -129,7 +129,7 @@ export default class Cl_mSistema {
         return { success: true };
     }
 
-    registrarAporte(campañaId: number | string, cedula: string, monto: string): RespuestaAccion {
+    registrarAporte(campañaId: number | string, cedula: string, monto: string, referencia: string): RespuestaAccion {
         const campaña = this.obtenerCampaña(campañaId);
         if (!campaña) return { error: 'Campaña no encontrada.' };
 
@@ -137,7 +137,7 @@ export default class Cl_mSistema {
             return { error: 'Esta campaña ya no acepta aportes.' };
         }
 
-        const aporte = new Cl_mAporte(cedula, monto);
+        const aporte = new Cl_mAporte(cedula, monto, referencia);
         const error = aporte.validar();
 
         if (error) {

@@ -3,35 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión de Aportes y Donaciones - UCLA</title>
+    <title>Gestión de Aportes - UCLA</title>
+    <!-- Enlazamos el nuevo CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header Institucional -->
-    <div class="header">
-        <h1>🏫 UCLA - Sistema de Gestión de Aportes y Donaciones</h1>
-        <p>Barquisimeto, Venezuela</p>
-    </div>
+    
+    <!-- Barra de Navegación Superior -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-logo">🏫</div>
+            <div class="brand-text">
+                <h1>UCLA / Sistema de Gestión</h1>
+                <p>Decanato de Ciencias y Tecnología</p>
+            </div>
+        </div>
+    </header>
 
-    <div class="container">
-        <!-- SECCIÓN: INICIO (Admin) -->
+    <main class="main-container">
+        
+        <!-- ================= DASHBOARD (Inicio) ================= -->
         <section id="dashboard" class="section active">
-            <div class="breadcrumb">
-                <strong>📊 Tablero de Control</strong>
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">Admin / Dashboard</div>
+                    <h2 class="page-title">Tablero de Control</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="app.irVistaParticipante()">
+                        👥 Vista Participante
+                    </button>
+                    <button class="btn btn-primary" onclick="app.irCrearCampaña()">
+                        ➕ Nueva Campaña
+                    </button>
+                </div>
             </div>
 
-            <div class="alert alert-info" id="alertContainer"></div>
+            <!-- Alertas Globales -->
+            <div id="alertContainer"></div>
 
-            <div class="btn-group" style="justify-content: flex-start; margin-bottom: 20px;">
-                <button class="btn btn-primary" onclick="app.irCrearCampaña()">
-                    ➕ Crear Campaña
-                </button>
-                <button class="btn btn-secondary" onclick="app.irVistaParticipante()">
-                    👥 Sección Participante
-                </button>
-            </div>
-
-            <!-- Estadísticas -->
+            <!-- Grid de Estadísticas -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number" id="statActivas">0</div>
@@ -39,779 +50,318 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statCompletadas">0</div>
-                    <div class="stat-label">Campañas Completadas</div>
+                    <div class="stat-label">Completadas</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statTotalAportes">0</div>
-                    <div class="stat-label">Total de Aportes</div>
+                    <div class="stat-label">Aportes Totales</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statTotalRecaudado">$0</div>
-                    <div class="stat-label">Dinero Recaudado</div>
+                    <div class="stat-label">Recaudado</div>
                 </div>
             </div>
 
             <!-- Tabla de Campañas -->
             <div class="card">
-                <h2>📋 Campañas Activas</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Objetivo</th>
-                            <th>Recaudado</th>
-                            <th>%</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableCampanas">
-                        <tr><td colspan="6" style="text-align: center; color: var(--text-light);">No hay campañas registradas</td></tr>
-                    </tbody>
-                </table>
+                <h2>📋 Campañas en Curso</h2>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Campaña</th>
+                                <th>Objetivo</th>
+                                <th>Recaudado</th>
+                                <th>Progreso</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableCampanas">
+                            <!-- Se llena vía TypeScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- SECCIÓN: Crear Campaña -->
+        <!-- ================= CREAR CAMPAÑA ================= -->
         <section id="crearCampaña" class="section">
-            <div class="breadcrumb">
-                <a onclick="app.irDashboard()">← Volver al Tablero</a> / <strong>Crear Nueva Campaña</strong>
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a onclick="app.irDashboard()">Dashboard</a> <span>/</span> Crear
+                    </div>
+                    <h2 class="page-title">Nueva Campaña</h2>
+                </div>
             </div>
 
-            <div class="card">
-                <h2>📝 Crear Nueva Campaña</h2>
+            <div id="alertContainer2"></div>
 
-                <div id="alertContainer2"></div>
-
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
                 <form id="formCampaña">
                     <div class="form-group">
-                        <label>Nombre de la Campaña *</label>
-                        <input type="text" id="campNombre" required placeholder="Ej: Compra de Mouses para Laboratorio">
+                        <label>Nombre de la Campaña</label>
+                        <input type="text" id="campNombre" placeholder="Ej: Dotación de Laboratorio" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Descripción *</label>
-                        <textarea id="campDescripcion" required placeholder="Describa el propósito de la campaña..."></textarea>
+                        <label>Descripción</label>
+                        <textarea id="campDescripcion" placeholder="Detalle el propósito..." required></textarea>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Monto Objetivo ($) *</label>
-                            <input type="number" id="campMontoObjetivo" required min="0.01" step="0.01" placeholder="Ej: 500">
+                            <label>Monto Objetivo ($)</label>
+                            <input type="number" id="campMontoObjetivo" min="0.01" step="0.01" placeholder="0.00" required>
                         </div>
-
                         <div class="form-group">
-                            <label>Fecha de Inicio *</label>
+                            <label>Fecha Inicio</label>
                             <input type="date" id="campFechaInicio" required>
                         </div>
-
                         <div class="form-group">
-                            <label>Fecha de Cierre *</label>
+                            <label>Fecha Cierre</label>
                             <input type="date" id="campFechaCierre" required>
                         </div>
                     </div>
 
-                    <div class="info-box">
-                        <strong>ℹ️ Estado Inicial:</strong> ACTIVA
-                        <p>La campaña se mantendrá activa hasta su fecha de cierre o hasta que el monto objetivo sea alcanzado automáticamente.</p>
+                    <div class="alert alert-info" style="margin-top: 1rem; background: var(--background); border: none;">
+                        ℹ️ <strong>Nota:</strong> La campaña iniciará con estado ACTIVA.
                     </div>
 
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-success">✅ Crear Campaña</button>
-                        <button type="button" class="btn btn-secondary" onclick="app.irDashboard()">❌ Cancelar</button>
+                    <div class="btn-group" style="justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" onclick="app.irDashboard()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Campaña</button>
                     </div>
                 </form>
             </div>
         </section>
 
-        <!-- SECCIÓN: Detalle de Campaña -->
+        <!-- ================= DETALLE CAMPAÑA ================= -->
         <section id="detalleCampaña" class="section">
-            <div class="breadcrumb">
-                <a onclick="app.irDashboard()">← Volver al Tablero</a> / <strong id="detalleTitulo">Detalle de Campaña</strong>
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a onclick="app.irDashboard()">Dashboard</a> <span>/</span> Detalle
+                    </div>
+                    <h2 class="page-title" id="detalleNombre">Cargando...</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btnEditarCampaña" onclick="app.irEditarCampaña()">
+                        ✏️ Editar
+                    </button>
+                    <button class="btn btn-secondary" onclick="app.exportarReporte()">
+                        📄 Reporte
+                    </button>
+                    <button class="btn btn-danger" id="btnCerrarCampaña" onclick="app.mostrarModalCerrar()">
+                        🔒 Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Métricas Superiores -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="detalleObjetivo">$0</div>
+                    <div class="stat-label">Objetivo</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="detalleRecaudado">$0</div>
+                    <div class="stat-label">Recaudado Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="detallePorcentaje">0%</div>
+                    <div class="stat-label">Porcentaje</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="detalleAportantes">0</div>
+                    <div class="stat-label">Donantes</div>
+                </div>
             </div>
 
             <div class="card">
-                <h3 id="detalleNombre"></h3>
-
-                <!-- Métricas -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="detalleObjetivo">$0</div>
-                        <div class="stat-label">Objetivo</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="detalleRecaudado">$0</div>
-                        <div class="stat-label">Recaudado</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="detallePorcentaje">0%</div>
-                        <div class="stat-label">Avance</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="detalleAportantes">0</div>
-                        <div class="stat-label">Aportantes</div>
-                    </div>
+                <h2>Progreso de Recaudación</h2>
+                <div class="progress-container">
+                    <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
                 </div>
+            </div>
 
-                <!-- Barra de Progreso -->
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-
+            <div class="form-row">
                 <!-- Mayor Aportante -->
-                <h3>🏆 Mayor Aportante</h3>
-                <div class="info-box">
-                    <p><strong>Cédula:</strong> <span id="mayorAportanteCedula">N/A</span></p>
-                    <p><strong>Monto:</strong> <span id="mayorAportanteMonto">$0</span></p>
+                <div class="card">
+                    <h2>🏆 Mayor Aportante</h2>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
+                        <h3 id="mayorAportanteCedula" style="font-size: 1.2rem; color: var(--text-main);">N/A</h3>
+                        <p id="mayorAportanteMonto" style="color: var(--success); font-weight: bold; font-size: 1.5rem;">$0.00</p>
+                    </div>
                 </div>
 
-                <!-- Lista de Aportes -->
-                <h3>📊 Lista de Aportes Recientes</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Cédula</th>
-                            <th>Monto</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableAportes">
-                        <tr><td colspan="3" style="text-align: center; color: var(--text-light);">Sin aportes registrados</td></tr>
-                    </tbody>
-                </table>
-
-                <!-- Acciones -->
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="app.exportarReporte()">📄 Exportar Reporte</button>
-                    <button class="btn btn-danger" id="btnCerrarCampaña" onclick="app.mostrarModalCerrar()">🔒 Cerrar Campaña</button>
-                    <button class="btn btn-secondary" id="btnEditarCampaña" onclick="app.irEditarCampaña()">✏️ Editar</button>
+                <!-- Tabla de Aportes -->
+                <div class="card">
+                    <h2>Historial de Aportes</h2>
+                    <div class="table-container" style="max-height: 300px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Referencia</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableAportes">
+                                <!-- Se llena vía TypeScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN: Editar Campaña -->
+        <!-- ================= EDITAR CAMPAÑA ================= -->
         <section id="editarCampaña" class="section">
-            <div class="breadcrumb">
-                <a onclick="app.irDashboard()">← Volver al Tablero</a> / <strong>Editar Campaña</strong>
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a onclick="app.irDetalleCampaña()">Detalle</a> <span>/</span> Editar
+                    </div>
+                    <h2 class="page-title">Editar Campaña</h2>
+                </div>
             </div>
 
-            <div class="card">
-                <h2>✏️ Editar Campaña</h2>
+            <div id="alertContainer3"></div>
 
-                <div id="alertContainer3"></div>
-
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
                 <form id="formEditar">
                     <div class="form-group">
-                        <label>Nombre de la Campaña *</label>
+                        <label>Nombre</label>
                         <input type="text" id="editNombre" required>
                     </div>
-
                     <div class="form-group">
-                        <label>Descripción *</label>
+                        <label>Descripción</label>
                         <textarea id="editDescripcion" required></textarea>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Monto Objetivo ($) *</label>
-                            <input type="number" id="editMontoObjetivo" required min="0.01" step="0.01">
+                            <label>Monto Objetivo</label>
+                            <input type="number" id="editMontoObjetivo" min="0.01" step="0.01" required>
                         </div>
-
                         <div class="form-group">
-                            <label>Fecha de Inicio *</label>
+                            <label>Fecha Inicio</label>
                             <input type="date" id="editFechaInicio" required>
                         </div>
-
                         <div class="form-group">
-                            <label>Fecha de Cierre *</label>
+                            <label>Fecha Cierre</label>
                             <input type="date" id="editFechaCierre" required>
                         </div>
                     </div>
-
-                    <div class="alert alert-warning">
-                        ⚠️ <strong>Importante:</strong> Solo se pueden editar campañas que no hayan recibido aportes.
-                    </div>
-
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">✅ Guardar Cambios</button>
-                        <button type="button" class="btn btn-secondary" onclick="app.irDetalleCampaña()">❌ Cancelar</button>
+                        <button type="button" class="btn btn-secondary" onclick="app.irDetalleCampaña()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                     </div>
                 </form>
             </div>
         </section>
 
-        <!-- SECCIÓN: Participante (Registrar Aporte) -->
+        <!-- ================= VISTA PARTICIPANTE ================= -->
         <section id="vistaParticipante" class="section">
-            <div class="breadcrumb">
-                <a onclick="app.irDashboard()">← Volver</a> / <strong>Registrar Mi Aporte</strong>
+            <div class="page-header" style="justify-content: center; flex-direction: column; text-align: center;">
+                <h2 class="page-title">Portal de Donaciones</h2>
+                <p style="color: var(--text-muted);">Seleccione una causa y realice su aporte de forma segura.</p>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button class="btn btn-secondary" onclick="app.irDashboard()">← Volver al Admin</button>
             </div>
 
-            <div id="alertContainer4"></div>
+            <div id="alertContainer4" style="max-width: 500px; margin: 0 auto;"></div>
 
-            <!-- Seleccionar Campaña -->
-            <div class="card">
-                <h2>🎯 Seleccionar Campaña</h2>
-                <select id="selectCampaña" onchange="app.seleccionarCampaña()" class="form-group" style="padding: 12px; font-size: 14px;">
-                    <option value="">-- Seleccione una campaña --</option>
-                </select>
+            <!-- Paso 1: Selección -->
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <div class="form-group">
+                    <label>Seleccione una Campaña Activa:</label>
+                    <select id="selectCampaña" onchange="app.seleccionarCampaña()">
+                        <option value="">-- Seleccionar --</option>
+                    </select>
+                </div>
             </div>
 
-            <!-- Formulario de Aporte -->
-            <div class="card" id="formularioAporte" style="display: none;">
-                <h2>💰 Registrar Mi Aporte</h2>
-
-                <div class="info-box">
-                    <strong>Campaña Seleccionada:</strong> <span id="aporteNombreCampaña"></span>
+            <!-- Paso 2: Formulario -->
+            <div class="card" id="formularioAporte" style="display: none; max-width: 500px; margin: 2rem auto;">
+                <div style="background: var(--background); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;">
+                    <strong style="color: var(--primary);">Aportando a:</strong>
+                    <div id="aporteNombreCampaña" style="font-size: 1.2rem; font-weight: 600;"></div>
                 </div>
 
                 <form id="formAporte">
                     <div class="form-group">
-                        <label>Cédula de Identidad *</label>
-                        <input type="text" id="aporteCedula" required placeholder="Ej: V-12345678">
+                        <label>Su Cédula de Identidad</label>
+                        <input type="text" id="aporteCedula" placeholder="V-12345678" required>
                     </div>
-
                     <div class="form-group">
-                        <label>Monto a Aportar ($) *</label>
-                        <input type="number" id="aporteMonto" required min="0.01" step="0.01" placeholder="Ej: 50">
+                        <label>Monto a Aportar ($)</label>
+                        <input type="number" id="aporteMonto" min="0.01" step="0.01" placeholder="0.00" required>
                     </div>
-
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-success">✅ Registrar Aporte</button>
-                        <button type="button" class="btn btn-secondary" onclick="app.irVistaParticipante()">❌ Cancelar</button>
+                    <div class="form-group">
+                        <label>Referencia de Pago</label>
+                        <input type="text" id="aporteReferencia" placeholder="Ej: TRANS123456" required>
                     </div>
+                    <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center;">
+                        Confirmar Aporte 💸
+                    </button>
                 </form>
             </div>
 
-            <!-- Recibo de Aporte -->
+            <!-- Paso 3: Recibo -->
             <div id="recibo" style="display: none;">
                 <div class="receipt">
-                    <div class="receipt-title">✅ ¡Gracias por su Aporte!</div>
+                    <div class="receipt-title">¡Aporte Exitoso!</div>
                     <div class="receipt-item">
-                        <strong>Cédula:</strong> <span id="reciboCedula"></span>
+                        <span>Campaña</span>
+                        <strong id="reciboCampaña">--</strong>
                     </div>
                     <div class="receipt-item">
-                        <strong>Monto:</strong> <span id="reciboMonto"></span>
+                        <span>Cédula</span>
+                        <strong id="reciboCedula">--</strong>
                     </div>
                     <div class="receipt-item">
-                        <strong>Campaña:</strong> <span id="reciboCampaña"></span>
+                        <span>Monto</span>
+                        <strong id="reciboMonto" style="color: var(--success); font-size: 1.2rem;">--</strong>
                     </div>
                     <div class="receipt-item">
-                        <strong>Fecha:</strong> <span id="reciboFecha"></span>
+                        <span>Referencia</span>
+                        <strong id="reciboReferencia">--</strong>
                     </div>
-                    <button class="btn btn-primary" onclick="app.irVistaParticipante()" style="margin-top: 20px;">Hacer Otro Aporte</button>
+                    <div class="receipt-item">
+                        <span>Fecha</span>
+                        <strong id="reciboFecha">--</strong>
+                    </div>
+                    <button class="btn btn-primary" onclick="app.irVistaParticipante()" style="margin-top: 2rem; width: 100%;">
+                        Realizar otro aporte
+                    </button>
                 </div>
             </div>
         </section>
-    </div>
 
-    <!-- Modal de Confirmación -->
+    </main>
+
+    <!-- Modal de Confirmación (Global) -->
     <div id="modalCerrar" class="modal">
         <div class="modal-content">
-            <div class="modal-header">⚠️ Confirmar Cierre de Campaña</div>
+            <div class="modal-header">⚠️ Confirmar Acción</div>
             <div class="modal-body">
-                ¿Está seguro de que desea cerrar esta campaña? No se podrán recibir más fondos después de esto.
+                <p>¿Está seguro que desea <strong>CERRAR</strong> esta campaña?</p>
+                <p style="font-size: 0.9rem; margin-top: 10px; color: var(--danger);">Esta acción no se puede deshacer y ya no se podrán recibir más fondos.</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" onclick="app.cerrarCampaña()">Sí, Cerrar</button>
                 <button class="btn btn-secondary" onclick="app.cerrarModal()">Cancelar</button>
+                <button class="btn btn-danger" onclick="app.cerrarCampaña()">Sí, Cerrar Campaña</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // ============ MODELO: Campaña ============
-        class Campaña {
-            constructor(datos) {
-                this.id = Date.now();
-                this.nombre = datos.nombre;
-                this.descripcion = datos.descripcion;
-                this.montoObjetivo = parseFloat(datos.montoObjetivo);
-                this.montoRecaudado = 0;
-                this.estado = 'ACTIVA';
-                this.fechaInicio = new Date(datos.fechaInicio);
-                this.fechaCierre = new Date(datos.fechaCierre);
-                this.aportes = [];
-            }
-
-            agregarAporte(cedula, monto) {
-                const aporte = {
-                    cedula,
-                    monto: parseFloat(monto),
-                    fecha: new Date()
-                };
-                this.aportes.push(aporte);
-                this.montoRecaudado += aporte.monto;
-                this.verificarCompleción();
-            }
-
-            verificarCompleción() {
-                if (this.montoRecaudado >= this.montoObjetivo) {
-                    this.estado = 'COMPLETADA';
-                }
-            }
-
-            estaActiva() {
-                const hoy = new Date();
-                return this.estado === 'ACTIVA' && 
-                       hoy >= this.fechaInicio && 
-                       hoy <= this.fechaCierre;
-            }
-
-            obtenerMetricas() {
-                const porcentaje = (this.montoRecaudado / this.montoObjetivo * 100).toFixed(2);
-                const mayorAportante = this.aportes.length > 0
-                    ? this.aportes.reduce((prev, current) => 
-                        prev.monto > current.monto ? prev : current)
-                    : null;
-
-                return {
-                    porcentaje,
-                    mayorAportante,
-                    aportantes: this.aportes.length
-                };
-            }
-        }
-
-        // ============ MODELO: Sistema ============
-        class SistemaAportes {
-            constructor() {
-                this.campañas = [];
-                this.campañaActual = null;
-            }
-
-            crearCampaña(datos) {
-                // Validaciones
-                if (!datos.nombre || datos.nombre.trim() === '') {
-                    return { error: 'El nombre de la campaña es obligatorio.' };
-                }
-                if (!datos.descripcion || datos.descripcion.trim() === '') {
-                    return { error: 'La descripción es obligatoria.' };
-                }
-                if (parseFloat(datos.montoObjetivo) <= 0) {
-                    return { error: 'El monto objetivo debe ser mayor a 0.' };
-                }
-
-                const inicio = new Date(datos.fechaInicio);
-                const cierre = new Date(datos.fechaCierre);
-                const hoy = new Date();
-
-                if (inicio < hoy) {
-                    return { error: 'La fecha de inicio debe ser igual o posterior a hoy.' };
-                }
-                if (cierre <= inicio) {
-                    return { error: 'La fecha de cierre debe ser posterior a la fecha de inicio.' };
-                }
-
-                const campaña = new Campaña(datos);
-                this.campañas.push(campaña);
-                return { success: true, campaña };
-            }
-
-            obtenerResumen() {
-                const activas = this.campañas.filter(c => c.estado === 'ACTIVA').length;
-                const completadas = this.campañas.filter(c => c.estado === 'COMPLETADA').length;
-                const totalAportes = this.campañas.reduce((sum, c) => sum + c.aportes.length, 0);
-                const totalRecaudado = this.campañas.reduce((sum, c) => sum + c.montoRecaudado, 0);
-
-                return { activas, completadas, totalAportes, totalRecaudado };
-            }
-
-            obtenerCampañasActivas() {
-                return this.campañas.filter(c => c.estado === 'ACTIVA');
-            }
-
-            obtenerCampaña(id) {
-                return this.campañas.find(c => c.id == id);
-            }
-
-            editarCampaña(id, datos) {
-                const campaña = this.obtenerCampaña(id);
-                if (!campaña) return { error: 'Campaña no encontrada.' };
-
-                if (campaña.aportes.length > 0) {
-                    return { error: 'No se puede editar una campaña con fondos ya recaudados.' };
-                }
-
-                // Validaciones
-                if (!datos.nombre || datos.nombre.trim() === '') {
-                    return { error: 'El nombre es obligatorio.' };
-                }
-                if (parseFloat(datos.montoObjetivo) <= 0) {
-                    return { error: 'El monto debe ser mayor a 0.' };
-                }
-
-                const cierre = new Date(datos.fechaCierre);
-                const inicio = new Date(datos.fechaInicio);
-
-                if (cierre <= inicio) {
-                    return { error: 'La fecha de cierre debe ser posterior a la de inicio.' };
-                }
-
-                campaña.nombre = datos.nombre;
-                campaña.descripcion = datos.descripcion;
-                campaña.montoObjetivo = parseFloat(datos.montoObjetivo);
-                campaña.fechaInicio = inicio;
-                campaña.fechaCierre = cierre;
-
-                return { success: true };
-            }
-
-            cerrarCampaña(id) {
-                const campaña = this.obtenerCampaña(id);
-                if (!campaña) return { error: 'Campaña no encontrada.' };
-
-                if (campaña.estado === 'COMPLETADA' || campaña.estado === 'CERRADA') {
-                    return { error: 'Esta campaña ya está cerrada.' };
-                }
-
-                campaña.estado = 'CERRADA';
-                return { success: true };
-            }
-
-            registrarAporte(campañaId, cedula, monto) {
-                const campaña = this.obtenerCampaña(campañaId);
-                if (!campaña) return { error: 'Campaña no encontrada.' };
-
-                if (!campaña.estaActiva()) {
-                    return { error: 'Esta campaña ya no acepta aportes.' };
-                }
-
-                if (!cedula || cedula.trim() === '') {
-                    return { error: 'La cédula es obligatoria.' };
-                }
-
-                if (parseFloat(monto) <= 0) {
-                    return { error: 'El monto debe ser mayor a 0.' };
-                }
-
-                campaña.agregarAporte(cedula, monto);
-                return { success: true };
-            }
-        }
-
-        // ============ CONTROLADOR ============
-        class Controlador {
-            constructor() {
-                this.sistema = new SistemaAportes();
-                this.campañaEnEdición = null;
-                this.inicializarEventos();
-                this.establecerFechasMinimas();
-            }
-
-            inicializarEventos() {
-                document.getElementById('formCampaña').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.crearCampaña();
-                });
-
-                document.getElementById('formEditar').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.guardarEdición();
-                });
-
-                document.getElementById('formAporte').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.registrarAporte();
-                });
-            }
-
-            establecerFechasMinimas() {
-                const hoy = new Date().toISOString().split('T')[0];
-                document.getElementById('campFechaInicio').setAttribute('min', hoy);
-                document.getElementById('editFechaInicio').setAttribute('min', hoy);
-            }
-
-            crearCampaña() {
-                const datos = {
-                    nombre: document.getElementById('campNombre').value,
-                    descripcion: document.getElementById('campDescripcion').value,
-                    montoObjetivo: document.getElementById('campMontoObjetivo').value,
-                    fechaInicio: document.getElementById('campFechaInicio').value,
-                    fechaCierre: document.getElementById('campFechaCierre').value
-                };
-
-                const resultado = this.sistema.crearCampaña(datos);
-
-                if (resultado.error) {
-                    this.mostrarAlerta(resultado.error, 'error', 'alertContainer2');
-                } else {
-                    this.mostrarAlerta('✅ Campaña creada exitosamente', 'success', 'alertContainer2');
-                    setTimeout(() => this.irDashboard(), 1500);
-                }
-            }
-
-            guardarEdición() {
-                const datos = {
-                    nombre: document.getElementById('editNombre').value,
-                    descripcion: document.getElementById('editDescripcion').value,
-                    montoObjetivo: document.getElementById('editMontoObjetivo').value,
-                    fechaInicio: document.getElementById('editFechaInicio').value,
-                    fechaCierre: document.getElementById('editFechaCierre').value
-                };
-
-                const resultado = this.sistema.editarCampaña(this.campañaEnEdición.id, datos);
-
-                if (resultado.error) {
-                    this.mostrarAlerta(resultado.error, 'error', 'alertContainer3');
-                } else {
-                    this.mostrarAlerta('✅ Campaña actualizada', 'success', 'alertContainer3');
-                    setTimeout(() => this.irDetalleCampaña(), 1500);
-                }
-            }
-
-            registrarAporte() {
-                const select = document.getElementById('selectCampaña');
-                const campañaId = select.value;
-                const cedula = document.getElementById('aporteCedula').value;
-                const monto = document.getElementById('aporteMonto').value;
-
-                const resultado = this.sistema.registrarAporte(campañaId, cedula, monto);
-
-                if (resultado.error) {
-                    this.mostrarAlerta(resultado.error, 'error', 'alertContainer4');
-                } else {
-                    const campaña = this.sistema.obtenerCampaña(campañaId);
-                    this.mostrarRecibo(cedula, monto, campaña.nombre);
-                }
-            }
-
-            mostrarRecibo(cedula, monto, nombreCampaña) {
-                document.getElementById('reciboCedula').textContent = cedula;
-                document.getElementById('reciboMonto').textContent = '$' + parseFloat(monto).toFixed(2);
-                document.getElementById('reciboCampaña').textContent = nombreCampaña;
-                document.getElementById('reciboFecha').textContent = new Date().toLocaleDateString('es-ES');
-
-                document.getElementById('formularioAporte').style.display = 'none';
-                document.getElementById('recibo').style.display = 'block';
-                document.getElementById('selectCampaña').value = '';
-            }
-
-            actualizarDashboard() {
-                const resumen = this.sistema.obtenerResumen();
-                document.getElementById('statActivas').textContent = resumen.activas;
-                document.getElementById('statCompletadas').textContent = resumen.completadas;
-                document.getElementById('statTotalAportes').textContent = resumen.totalAportes;
-                document.getElementById('statTotalRecaudado').textContent = '$' + resumen.totalRecaudado.toFixed(2);
-
-                this.actualizarTablaCampañas();
-            }
-
-            actualizarTablaCampañas() {
-                const tabla = document.getElementById('tableCampanas');
-                const campañas = this.sistema.campañas;
-
-                if (campañas.length === 0) {
-                    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-light);">No hay campañas registradas</td></tr>';
-                    return;
-                }
-
-                tabla.innerHTML = campañas.map(c => `
-                    <tr>
-                        <td><strong>${c.nombre}</strong></td>
-                        <td>$${c.montoObjetivo.toFixed(2)}</td>
-                        <td>$${c.montoRecaudado.toFixed(2)}</td>
-                        <td>${(c.montoRecaudado / c.montoObjetivo * 100).toFixed(0)}%</td>
-                        <td>
-                            <span class="badge ${c.estado === 'ACTIVA' ? 'badge-success' : c.estado === 'COMPLETADA' ? 'badge-info' : 'badge-danger'}">
-                                ${c.estado}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="action-icons">
-                                <button class="icon-btn" title="Ver Detalle" onclick="app.irDetalleCampaña(${c.id})">👁️</button>
-                                <button class="icon-btn ${c.aportes.length > 0 ? 'disabled' : ''}" 
-                                    title="${c.aportes.length > 0 ? 'No se puede editar con aportes' : 'Editar'}"
-                                    onclick="app.irEditarCampaña(${c.id})" 
-                                    ${c.aportes.length > 0 ? 'disabled' : ''}>✏️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            actualizarDetalleCampaña(id) {
-                const campaña = this.sistema.obtenerCampaña(id);
-                if (!campaña) return;
-
-                this.campañaEnEdición = campaña;
-                const metricas = campaña.obtenerMetricas();
-
-                document.getElementById('detalleNombre').textContent = campaña.nombre;
-                document.getElementById('detalleObjetivo').textContent = '$' + campaña.montoObjetivo.toFixed(2);
-                document.getElementById('detalleRecaudado').textContent = '$' + campaña.montoRecaudado.toFixed(2);
-                document.getElementById('detallePorcentaje').textContent = metricas.porcentaje + '%';
-                document.getElementById('detalleAportantes').textContent = metricas.aportantes;
-
-                const progressFill = document.getElementById('progressFill');
-                const ancho = Math.min(parseFloat(metricas.porcentaje), 100);
-                progressFill.style.width = ancho + '%';
-                progressFill.textContent = metricas.porcentaje + '%';
-
-                if (metricas.mayorAportante) {
-                    document.getElementById('mayorAportanteCedula').textContent = metricas.mayorAportante.cedula;
-                    document.getElementById('mayorAportanteMonto').textContent = '$' + metricas.mayorAportante.monto.toFixed(2);
-                } else {
-                    document.getElementById('mayorAportanteCedula').textContent = 'N/A';
-                    document.getElementById('mayorAportanteMonto').textContent = '$0';
-                }
-
-                const tableAportes = document.getElementById('tableAportes');
-                if (campaña.aportes.length === 0) {
-                    tableAportes.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">Sin aportes registrados</td></tr>';
-                } else {
-                    tableAportes.innerHTML = campaña.aportes.map(a => `
-                        <tr>
-                            <td>${a.cedula}</td>
-                            <td>$${a.monto.toFixed(2)}</td>
-                            <td>${a.fecha.toLocaleDateString('es-ES')}</td>
-                        </tr>
-                    `).join('');
-                }
-
-                const btnCerrar = document.getElementById('btnCerrarCampaña');
-                const btnEditar = document.getElementById('btnEditarCampaña');
-
-                if (campaña.estado === 'COMPLETADA' || campaña.estado === 'CERRADA') {
-                    btnCerrar.disabled = true;
-                    btnCerrar.style.opacity = '0.5';
-                    btnEditar.disabled = true;
-                    btnEditar.style.opacity = '0.5';
-                } else {
-                    btnCerrar.disabled = false;
-                    btnCerrar.style.opacity = '1';
-                    btnEditar.disabled = campaña.aportes.length > 0;
-                    btnEditar.style.opacity = campaña.aportes.length > 0 ? '0.5' : '1';
-                }
-            }
-
-            actualizarCampañasParticipante() {
-                const select = document.getElementById('selectCampaña');
-                const campañasActivas = this.sistema.campañas.filter(c => c.estaActiva());
-
-                select.innerHTML = '<option value="">-- Seleccione una campaña --</option>' +
-                    campañasActivas.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-            }
-
-            exportarReporte() {
-                if (!this.campañaEnEdición) return;
-
-                const c = this.campañaEnEdición;
-                let reporte = 'REPORTE DE CAMPAÑA\n';
-                reporte += '==================\n\n';
-                reporte += `Nombre: ${c.nombre}\n`;
-                reporte += `Descripción: ${c.descripcion}\n`;
-                reporte += `Objetivo: $${c.montoObjetivo.toFixed(2)}\n`;
-                reporte += `Recaudado: $${c.montoRecaudado.toFixed(2)}\n`;
-                reporte += `Porcentaje: ${(c.montoRecaudado / c.montoObjetivo * 100).toFixed(2)}%\n`;
-                reporte += `Estado: ${c.estado}\n\n`;
-
-                reporte += 'APORTES REGISTRADOS\n';
-                reporte += '-------------------\n';
-                reporte += 'Cédula | Monto | Fecha\n';
-                c.aportes.forEach(a => {
-                    reporte += `${a.cedula} | $${a.monto.toFixed(2)} | ${a.fecha.toLocaleDateString('es-ES')}\n`;
-                });
-
-                const blob = new Blob([reporte], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Reporte_${c.nombre}_${new Date().toISOString().split('T')[0]}.txt`;
-                a.click();
-            }
-
-            mostrarAlerta(mensaje, tipo, contenedor = 'alertContainer') {
-                const container = document.getElementById(contenedor);
-                container.innerHTML = `<div class="alert alert-${tipo}">${mensaje}</div>`;
-                setTimeout(() => {
-                    container.innerHTML = '';
-                }, 4000);
-            }
-
-            mostrarModalCerrar() {
-                document.getElementById('modalCerrar').classList.add('active');
-            }
-
-            cerrarModal() {
-                document.getElementById('modalCerrar').classList.remove('active');
-            }
-
-            cerrarCampaña() {
-                if (!this.campañaEnEdición) return;
-
-                const resultado = this.sistema.cerrarCampaña(this.campañaEnEdición.id);
-                this.cerrarModal();
-
-                if (resultado.error) {
-                    this.mostrarAlerta(resultado.error, 'error');
-                } else {
-                    this.mostrarAlerta('✅ Campaña cerrada', 'success');
-                    this.actualizarDetalleCampaña(this.campañaEnEdición.id);
-                }
-            }
-
-            // Navegación
-            irSección(seccionId) {
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById(seccionId).classList.add('active');
-            }
-
-            irDashboard() {
-                this.irSección('dashboard');
-                this.actualizarDashboard();
-            }
-
-            irCrearCampaña() {
-                document.getElementById('formCampaña').reset();
-                this.irSección('crearCampaña');
-            }
-
-            irDetalleCampaña(id = null) {
-                if (id) {
-                    this.actualizarDetalleCampaña(id);
-                }
-                this.irSección('detalleCampaña');
-            }
-
-            irEditarCampaña(id = null) {
-                if (id) {
-                    const campaña = this.sistema.obtenerCampaña(id);
-                    document.getElementById('editNombre').value = campaña.nombre;
-                    document.getElementById('editDescripcion').value = campaña.descripcion;
-                    document.getElementById('editMontoObjetivo').value = campaña.montoObjetivo;
-                    document.getElementById('editFechaInicio').value = campaña.fechaInicio.toISOString().split('T')[0];
-                    document.getElementById('editFechaCierre').value = campaña.fechaCierre.toISOString().split('T')[0];
-                    this.campañaEnEdición = campaña;
-                }
-                this.irSección('editarCampaña');
-            }
-
-            irVistaParticipante() {
-                document.getElementById('selectCampaña').value = '';
-                document.getElementById('formularioAporte').style.display = 'none';
-                document.getElementById('recibo').style.display = 'none';
-                document.getElementById('formAporte').reset();
-                this.actualizarCampañasParticipante();
-                this.irSección('vistaParticipante');
-            }
-
-            seleccionarCampaña() {
-                const select = document.getElementById('selectCampaña');
-                if (select.value) {
-                    const campaña = this.sistema.obtenerCampaña(select.value);
-                    document.getElementById('aporteNombreCampaña').textContent = campaña.nombre;
-                    document.getElementById('formularioAporte').style.display = 'block';
-                    document.getElementById('recibo').style.display = 'none';
-                    document.getElementById('formAporte').reset();
-                } else {
-                    document.getElementById('formularioAporte').style.display = 'none';
-                }
-            }
-        }
-
-        // ============ INICIALIZAR ============
-        const app = new Controlador();
-        app.irDashboard();
-    </script>
+    <!-- IMPORTANTE: Aquí enlazamos el JS compilado -->
+    <script type="module" src="./dist/Cl_index.js"></script>
 </body>
 </html>

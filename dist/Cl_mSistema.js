@@ -85,14 +85,14 @@ class Cl_mSistema {
         this.guardar();
         return { success: true };
     }
-    registrarAporte(campañaId, cedula, monto) {
+    registrarAporte(campañaId, cedula, monto, referencia) {
         const campaña = this.obtenerCampaña(campañaId);
         if (!campaña)
             return { error: 'Campaña no encontrada.' };
         if (!campaña.estaActiva()) {
             return { error: 'Esta campaña ya no acepta aportes.' };
         }
-        const aporte = new Cl_mAporte(cedula, monto);
+        const aporte = new Cl_mAporte(cedula, monto, referencia);
         const error = aporte.validar();
         if (error) {
             return { error };

@@ -112,8 +112,8 @@ export default class Cl_Controlador {
         }, 4000);
     }
 
-    mostrarRecibo(cedula: string, monto: string, nombreCampaña: string): void {
-        this.vAporte.mostrarRecibo(cedula, monto, nombreCampaña);
+    mostrarRecibo(cedula: string, monto: string, referencia: string, nombreCampaña: string): void {
+        this.vAporte.mostrarRecibo(cedula, monto, referencia, nombreCampaña);
     }
 }
 
