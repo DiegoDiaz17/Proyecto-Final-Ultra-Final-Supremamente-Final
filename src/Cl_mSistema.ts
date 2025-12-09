@@ -1,5 +1,6 @@
 import Cl_mCampaña from './Cl_mCampaña.js';
 import Cl_mAporte from './Cl_mAporte.js';
+import storage from './tools/storage.js';
 
 export interface RespuestaAccion {
     error?: string;
@@ -14,7 +15,7 @@ export default class Cl_mSistema {
     constructor() {
         // Intentar cargar estado desde localStorage
         try {
-            const raw = (localStorage && localStorage.getItem) ? localStorage.getItem(Cl_mSistema.STORAGE_KEY) : null;
+            const raw = storage.get(Cl_mSistema.STORAGE_KEY);
             if (raw) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed)) {
@@ -22,7 +23,6 @@ export default class Cl_mSistema {
                 }
             }
         } catch (e) {
-            // No hacer nada si el parsing falla
             this._campañas = [];
         }
     }
@@ -30,7 +30,7 @@ export default class Cl_mSistema {
     private guardar(): void {
         try {
             const data = this._campañas.map(c => c.toJSON());
-            localStorage.setItem(Cl_mSistema.STORAGE_KEY, JSON.stringify(data));
+            storage.set(Cl_mSistema.STORAGE_KEY, JSON.stringify(data));
         } catch (e) {
             // Silenciar errores de almacenamiento (por ejemplo, entorno sin localStorage)
         }
@@ -129,7 +129,7 @@ export default class Cl_mSistema {
         return { success: true };
     }
 
-    registrarAporte(campañaId: number | string, cedula: string, monto: string, referencia: string): RespuestaAccion {
+    registrarAporte(campañaId: number | string, cedula: string, nombre: string, monto: string, referencia: string): RespuestaAccion {
         const campaña = this.obtenerCampaña(campañaId);
         if (!campaña) return { error: 'Campaña no encontrada.' };
 
@@ -137,7 +137,7 @@ export default class Cl_mSistema {
             return { error: 'Esta campaña ya no acepta aportes.' };
         }
 
-        const aporte = new Cl_mAporte(cedula, monto, referencia);
+        const aporte = new Cl_mAporte(cedula,nombre, monto, referencia);
         const error = aporte.validar();
 
         if (error) {
