@@ -12,7 +12,7 @@
     <!-- Barra de Navegación Superior -->
     <header class="app-header">
         <div class="brand">
-            <div class="brand-logo">🏫</div>
+            <div class="brand-logo"></div>
             <div class="brand-text">
                 <h1>UCLA / Sistema de Gestión</h1>
                 <p>Decanato de Ciencias y Tecnología</p>
@@ -26,12 +26,12 @@
         <section id="dashboard" class="section active">
             <div class="page-header">
                 <div>
-                    <div class="breadcrumb">Admin / Dashboard</div>
+                    <div class="breadcrumb">Admin / Volver</div>
                     <h2 class="page-title">Tablero de Control</h2>
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-secondary" onclick="app.irVistaParticipante()">
-                        👥 Vista Participante
+                         Vista Participante
                     </button>
                     <button class="btn btn-primary" onclick="app.irCrearCampaña()">
                         ➕ Nueva Campaña
@@ -64,7 +64,7 @@
 
             <!-- Tabla de Campañas -->
             <div class="card">
-                <h2>📋 Campañas en Curso</h2>
+                <h2> Campañas en Curso</h2>
                 <div class="table-container">
                     <table class="table">
                         <thead>
@@ -90,7 +90,7 @@
             <div class="page-header">
                 <div>
                     <div class="breadcrumb">
-                        <a onclick="app.irDashboard()">Dashboard</a> <span>/</span> Crear
+                        <a onclick="app.irDashboard()">Volver</a> <span>/</span> Crear
                     </div>
                     <h2 class="page-title">Nueva Campaña</h2>
                 </div>
@@ -142,7 +142,7 @@
             <div class="page-header">
                 <div>
                     <div class="breadcrumb">
-                        <a onclick="app.irDashboard()">Dashboard</a> <span>/</span> Detalle
+                        <a onclick="app.irDashboard()">Volver</a> <span>/</span> Detalle
                     </div>
                     <h2 class="page-title" id="detalleNombre">Cargando...</h2>
                 </div>
@@ -189,7 +189,7 @@
             <div class="form-row">
                 <!-- Mayor Aportante -->
                 <div class="card">
-                    <h2>🏆 Mayor Aportante</h2>
+                    <h2> Mayor Aportante</h2>
                     <div style="text-align: center; padding: 1rem;">
                         <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
                         <h3 id="mayorAportanteCedula" style="font-size: 1.2rem; color: var(--text-main);">N/A</h3>
@@ -205,6 +205,7 @@
                             <thead>
                                 <tr>
                                     <th>Cédula</th>
+                                    <th>Nombre</th>
                                     <th>Monto</th>
                                     <th>Fecha</th>
                                     <th>Referencia</th>
@@ -300,6 +301,10 @@
                         <input type="text" id="aporteCedula" placeholder="V-12345678" required>
                     </div>
                     <div class="form-group">
+                        <label>Su Nombre</label>
+                        <input type="text" id="aporteNombre" placeholder="Juan Pérez" required>
+                    </div>
+                    <div class="form-group">
                         <label>Monto a Aportar ($)</label>
                         <input type="number" id="aporteMonto" min="0.01" step="0.01" placeholder="0.00" required>
                     </div>
@@ -308,7 +313,7 @@
                         <input type="text" id="aporteReferencia" placeholder="Ej: TRANS123456" required>
                     </div>
                     <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center;">
-                        Confirmar Aporte 💸
+                        Confirmar Aporte 
                     </button>
                 </form>
             </div>
@@ -324,6 +329,10 @@
                     <div class="receipt-item">
                         <span>Cédula</span>
                         <strong id="reciboCedula">--</strong>
+                    </div>
+                    <div class="receipt-item">
+                        <span>Nombre</span>
+                        <strong id="reciboNombre">--</strong>
                     </div>
                     <div class="receipt-item">
                         <span>Monto</span>

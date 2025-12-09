@@ -2,19 +2,24 @@ import { formatearFecha } from './tools/index.js';
 
 export interface IAporte {
     cedula: string;
+    nombre: string;
     monto: number;
-    fecha: Date;
+    fecha: Date | string;
     referencia: string;
+    
 }
 
 export default class Cl_mAporte {
     private _cedula: string;
+    private _nombre: string;
     private _monto: number;
     private _fecha: Date;
     private _referencia: string;
+    
 
-    constructor(cedula: string, monto: string | number, referencia: string) {
+    constructor(cedula: string, nombre: string, monto: string | number, referencia: string) {
         this._cedula = cedula;
+        this._nombre = nombre;
         this._monto = parseFloat(monto as string);
         this._fecha = new Date();
         this._referencia = referencia;
@@ -23,6 +28,10 @@ export default class Cl_mAporte {
     get cedula(): string {
         return this._cedula;
     }
+
+ get nombre(): string {
+        return this._nombre;
+ }
 
     get monto(): number {
         return this._monto;
@@ -42,21 +51,27 @@ export default class Cl_mAporte {
     toJSON(): IAporte {
         return {
             cedula: this._cedula,
+            nombre: this._nombre,   
             monto: this._monto,
-            fecha: this._fecha,
+            fecha: this._fecha.toISOString(),
             referencia: this._referencia,
         };
     }
 
+
+    //acuerdense de poner los atributos nuevos aca
     static fromJSON(obj: IAporte): Cl_mAporte {
-        const aporte = new Cl_mAporte(obj.cedula, obj.monto, obj.referencia);
+        const aporte = new Cl_mAporte(obj.cedula, obj.nombre, obj.monto, obj.referencia);
         aporte._fecha = new Date(obj.fecha as any);
         return aporte;
     }
-
+// validar si los aportes son correctos
     validar(): string | false {
         if (!this._cedula || this._cedula.trim() === '') {
             return 'La cédula es obligatoria.';
+        }
+        if (!this._nombre || this._nombre.trim() === '') {
+            return 'El nombre es obligatorio.';
         }
         if (this._monto <= 0) {
             return 'El monto debe ser mayor a 0.';

@@ -75,15 +75,16 @@ export default class Cl_vSistema {
         const select = document.getElementById('selectCampaña');
         const campañaId = select.value;
         const cedula = document.getElementById('aporteCedula').value;
+        const nombre = document.getElementById('aporteNombre').value;
         const monto = document.getElementById('aporteMonto').value;
         const referencia = document.getElementById('aporteReferencia').value;
-        const resultado = this.sistema.registrarAporte(campañaId, cedula, monto, referencia);
+        const resultado = this.sistema.registrarAporte(campañaId, cedula, nombre, monto, referencia);
         if (resultado.error) {
             this.controlador.mostrarAlerta(resultado.error, 'error', 'alertContainer4');
         }
         else {
             const campaña = this.sistema.obtenerCampaña(campañaId);
-            this.controlador.mostrarRecibo(cedula, monto, referencia, campaña.nombre);
+            this.controlador.mostrarRecibo(cedula, nombre, monto, referencia, campaña.nombre);
         }
     }
     resetVistaParticipante() {

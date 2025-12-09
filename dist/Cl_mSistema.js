@@ -1,11 +1,12 @@
 import Cl_mCampaña from './Cl_mCampaña.js';
 import Cl_mAporte from './Cl_mAporte.js';
+import storage from './tools/storage.js';
 class Cl_mSistema {
     constructor() {
         this._campañas = [];
         // Intentar cargar estado desde localStorage
         try {
-            const raw = (localStorage && localStorage.getItem) ? localStorage.getItem(Cl_mSistema.STORAGE_KEY) : null;
+            const raw = storage.get(Cl_mSistema.STORAGE_KEY);
             if (raw) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed)) {
@@ -14,14 +15,13 @@ class Cl_mSistema {
             }
         }
         catch (e) {
-            // No hacer nada si el parsing falla
             this._campañas = [];
         }
     }
     guardar() {
         try {
             const data = this._campañas.map(c => c.toJSON());
-            localStorage.setItem(Cl_mSistema.STORAGE_KEY, JSON.stringify(data));
+            storage.set(Cl_mSistema.STORAGE_KEY, JSON.stringify(data));
         }
         catch (e) {
             // Silenciar errores de almacenamiento (por ejemplo, entorno sin localStorage)
@@ -85,14 +85,14 @@ class Cl_mSistema {
         this.guardar();
         return { success: true };
     }
-    registrarAporte(campañaId, cedula, monto, referencia) {
+    registrarAporte(campañaId, cedula, nombre, monto, referencia) {
         const campaña = this.obtenerCampaña(campañaId);
         if (!campaña)
             return { error: 'Campaña no encontrada.' };
         if (!campaña.estaActiva()) {
             return { error: 'Esta campaña ya no acepta aportes.' };
         }
-        const aporte = new Cl_mAporte(cedula, monto, referencia);
+        const aporte = new Cl_mAporte(cedula, nombre, monto, referencia);
         const error = aporte.validar();
         if (error) {
             return { error };

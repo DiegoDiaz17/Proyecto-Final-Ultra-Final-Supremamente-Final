@@ -8,7 +8,7 @@ export default class Cl_Controlador {
     vCampaña: Cl_vCampaña;
     vSistema: Cl_vSistema;
     vAporte: Cl_vAporte;
-
+// :c
     constructor() {
         this.sistema = new Cl_mSistema();
         this.vCampaña = new Cl_vCampaña(this.sistema, this);
@@ -112,8 +112,8 @@ export default class Cl_Controlador {
         }, 4000);
     }
 
-    mostrarRecibo(cedula: string, monto: string, referencia: string, nombreCampaña: string): void {
-        this.vAporte.mostrarRecibo(cedula, monto, referencia, nombreCampaña);
+    mostrarRecibo(cedula: string,nombre: string, monto: string, referencia: string, nombreCampaña: string): void {
+        this.vAporte.mostrarRecibo(cedula, nombre, monto, referencia, nombreCampaña);
     }
 }
 

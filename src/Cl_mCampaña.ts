@@ -8,8 +8,8 @@ export interface ICampaña {
     montoObjetivo: number;
     montoRecaudado: number;
     estado: 'ACTIVA' | 'COMPLETADA' | 'CERRADA';
-    fechaInicio: Date;
-    fechaCierre: Date;
+    fechaInicio: Date | string;
+    fechaCierre: Date | string;
     aportes: IAporte[];
 }
 
@@ -105,18 +105,20 @@ export default class Cl_mCampaña {
     }
 
     // Métodos
+    //aca se agregan los aportes
     agregarAporte(aporte: Cl_mAporte): void {
         this._aportes.push(aporte);
+        //se guardan los aportes al monto
         this._montoRecaudado += aporte.monto;
         this.verificarComplecion();
     }
-
+// verifica si ya se llego al monto 
     private verificarComplecion(): void {
         if (this._montoRecaudado >= this._montoObjetivo) {
             this._estado = 'COMPLETADA';
         }
     }
-
+// verifica si la campa;a esta activa
     estaActiva(): boolean {
         const hoy = new Date();
         return (
@@ -131,11 +133,12 @@ export default class Cl_mCampaña {
         mayorAportante: IAporte | null;
         aportantes: number;
     } {
+        // porcentaje monto objetivo
         const porcentaje =
             this._montoObjetivo > 0
                 ? ((this._montoRecaudado / this._montoObjetivo) * 100).toFixed(2)
                 : '0.00';
-
+// quien a aportado mas
         const mayorAportante =
             this._aportes.length > 0
                 ? this._aportes.reduce((prev, current) =>
@@ -149,7 +152,7 @@ export default class Cl_mCampaña {
             aportantes: this._aportes.length
         };
     }
-
+//validar si la campana esta bien 
     validar(): string | false {
         if (!this._nombre || this._nombre.trim() === '') {
             return 'El nombre es obligatorio.';
@@ -174,8 +177,8 @@ export default class Cl_mCampaña {
             montoObjetivo: this._montoObjetivo,
             montoRecaudado: this._montoRecaudado,
             estado: this._estado,
-            fechaInicio: this._fechaInicio,
-            fechaCierre: this._fechaCierre,
+            fechaInicio: this._fechaInicio.toISOString(),
+            fechaCierre: this._fechaCierre.toISOString(),
             aportes: this._aportes.map(a => a.toJSON())
         };
     }

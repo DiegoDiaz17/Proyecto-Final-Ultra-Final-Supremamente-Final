@@ -25,6 +25,7 @@ export default class Cl_vCampaña {
         if (editFechaInicio)
             editFechaInicio.min = fechaMin;
     }
+    //agarra los datos 
     crearCampaña() {
         const datos = {
             nombre: document.getElementById('campNombre').value,
@@ -42,6 +43,7 @@ export default class Cl_vCampaña {
             setTimeout(() => this.controlador.irDashboard(), 1500);
         }
     }
+    //editar campa;a
     guardarEdicion() {
         if (!this.campañaEnEdicion)
             return;
@@ -61,6 +63,7 @@ export default class Cl_vCampaña {
             setTimeout(() => this.controlador.irDetalleCampaña(), 1500);
         }
     }
+    //actualizar la edicion
     cargarFormularioEdicion(campaña) {
         this.campañaEnEdicion = campaña;
         document.getElementById('editNombre').value = campaña.nombre;
@@ -104,13 +107,14 @@ export default class Cl_vCampaña {
         const tableAportes = document.getElementById('tableAportes');
         if (campaña.aportes.length === 0) {
             tableAportes.innerHTML =
-                '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">Sin aportes registrados</td></tr>';
+                '<tr><td colspan="5" style="text-align: center; color: var(--text-light);">Sin aportes registrados</td></tr>';
         }
         else {
             tableAportes.innerHTML = campaña.aportes
                 .map(a => `
                 <tr>
                     <td>${a.cedula}</td>
+                    <td>${a.nombre}</td>
                     <td>$${a.monto.toFixed(2)}</td>
                     <td>${a.fecha.toLocaleDateString('es-ES')}</td>
                     <td>${a.referencia}</td>
@@ -148,9 +152,9 @@ export default class Cl_vCampaña {
         reporte += `Estado: ${c.estado}\n\n`;
         reporte += 'APORTES REGISTRADOS\n';
         reporte += '-------------------\n';
-        reporte += 'Cédula | Monto | Fecha | Referencia\n';
+        reporte += ' |Cédula | Nombre | Monto | Fecha | Referencia\n';
         c.aportes.forEach(a => {
-            reporte += `${a.cedula} | $${a.monto.toFixed(2)} | ${a.fecha.toLocaleDateString('es-ES')} | ${a.referencia}\n`;
+            reporte += `${a.cedula} | ${a.nombre} | $${a.monto.toFixed(2)} | ${a.fecha.toLocaleDateString('es-ES')} | ${a.referencia}\n`;
         });
         const blob = new Blob([reporte], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);

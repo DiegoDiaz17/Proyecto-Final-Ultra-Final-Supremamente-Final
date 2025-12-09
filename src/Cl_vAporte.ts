@@ -7,9 +7,10 @@ export default class Cl_vAporte {
     constructor(controlador: Cl_Controlador) {
         this.controlador = controlador;
     }
-
-    mostrarRecibo(cedula: string, monto: string, referencia: string, nombreCampaña: string): void {
+//muestra el recibo de cuando aporta
+    mostrarRecibo(cedula: string, nombre: string, monto: string, referencia: string, nombreCampaña: string): void {
         (document.getElementById('reciboCedula') as HTMLElement).textContent = cedula;
+        (document.getElementById('reciboNombre') as HTMLElement).textContent = nombre;
         (document.getElementById('reciboMonto') as HTMLElement).textContent =
             '$' + parseFloat(monto).toFixed(2);
         (document.getElementById('reciboReferencia') as HTMLElement).textContent = referencia;
@@ -23,7 +24,7 @@ export default class Cl_vAporte {
         recibo.style.display = 'block';
         (document.getElementById('selectCampaña') as HTMLSelectElement).value = '';
     }
-
+//lo resetea
     resetFormulario(): void {
         (document.getElementById('formAporte') as HTMLFormElement).reset();
     }

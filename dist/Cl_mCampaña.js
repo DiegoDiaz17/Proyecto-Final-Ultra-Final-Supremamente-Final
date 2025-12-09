@@ -59,16 +59,20 @@ export default class Cl_mCampaña {
         this._estado = estado;
     }
     // Métodos
+    //aca se agregan los aportes
     agregarAporte(aporte) {
         this._aportes.push(aporte);
+        //se guardan los aportes al monto
         this._montoRecaudado += aporte.monto;
         this.verificarComplecion();
     }
+    // verifica si ya se llego al monto 
     verificarComplecion() {
         if (this._montoRecaudado >= this._montoObjetivo) {
             this._estado = 'COMPLETADA';
         }
     }
+    // verifica si la campa;a esta activa
     estaActiva() {
         const hoy = new Date();
         return (this._estado === 'ACTIVA' &&
@@ -76,9 +80,11 @@ export default class Cl_mCampaña {
             hoy <= this._fechaCierre);
     }
     obtenerMetricas() {
+        // porcentaje monto objetivo
         const porcentaje = this._montoObjetivo > 0
             ? ((this._montoRecaudado / this._montoObjetivo) * 100).toFixed(2)
             : '0.00';
+        // quien a aportado mas
         const mayorAportante = this._aportes.length > 0
             ? this._aportes.reduce((prev, current) => prev.monto > current.monto ? prev : current)
             : null;
@@ -88,6 +94,7 @@ export default class Cl_mCampaña {
             aportantes: this._aportes.length
         };
     }
+    //validar si la campana esta bien 
     validar() {
         if (!this._nombre || this._nombre.trim() === '') {
             return 'El nombre es obligatorio.';
@@ -111,8 +118,8 @@ export default class Cl_mCampaña {
             montoObjetivo: this._montoObjetivo,
             montoRecaudado: this._montoRecaudado,
             estado: this._estado,
-            fechaInicio: this._fechaInicio,
-            fechaCierre: this._fechaCierre,
+            fechaInicio: this._fechaInicio.toISOString(),
+            fechaCierre: this._fechaCierre.toISOString(),
             aportes: this._aportes.map(a => a.toJSON())
         };
     }
