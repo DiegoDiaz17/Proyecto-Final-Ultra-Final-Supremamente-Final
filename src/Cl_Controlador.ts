@@ -8,7 +8,7 @@ export default class Cl_Controlador {
     vCampaña: Cl_vCampaña;
     vSistema: Cl_vSistema;
     vAporte: Cl_vAporte;
-
+// :c
     constructor() {
         this.sistema = new Cl_mSistema();
         this.vCampaña = new Cl_vCampaña(this.sistema, this);
